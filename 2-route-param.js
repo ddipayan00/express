@@ -9,6 +9,23 @@ app.get('/',(req,res)=>{
     <br><a href="/basic/products">ProductModel-1</a><br>
     <a href="/all/products">ProductModel-2</a>`)
 })
+app.get('/basic/query',(req,res)=>{
+    const { search,limit } = req.query
+    console.log(req.query)
+    let newProducts = [...products]
+    if(search){
+        newProducts = newProducts.filter((products)=>{
+            return products.name.startsWith(search)
+        })
+    }
+    if(limit){
+        newProducts = newProducts.slice(0,Number(limit))
+    }
+    if(newProducts.length < 1){
+        return res.status(200).json({success: true,data: []})
+    }
+    return res.status(200).json(newProducts)
+})
 app.get('/basic/products',(req,res)=>{
     const newProducts = products.map((products)=>{
         const {id,name,image,price} = products
@@ -52,4 +69,6 @@ app.all('*',(req,res)=>{
 app.listen(5000,()=>{
     console.log("Server is at 5000 port")
 })
+
+
 
